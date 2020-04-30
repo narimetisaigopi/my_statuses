@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "852719946120",
+    "firebase_url": "https://my-statues.firebaseio.com",
+    "project_id": "my-statues",
+    "storage_bucket": "my-statues.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852719946120:android:392491002b2b8c40db523d",
+        "android_client_info": {
+          "package_name": "com.example.my_statuses"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "852719946120-48ur48ts03bi4buesm07u77br3klvtd2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.my_statuses",
+            "certificate_hash": "29e919c4e94e44cde8a45980671a65e5058c1e6f"
+          }
+        },
+        {
+          "client_id": "852719946120-u3hasfohrvbrq2ha61jc32o31cm7jmqa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb-DIP7QySP_AHcqpG-jGbCj8MdH35iUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "852719946120-u3hasfohrvbrq2ha61jc32o31cm7jmqa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
