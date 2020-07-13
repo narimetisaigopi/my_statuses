@@ -1,4 +1,4 @@
-package com.example.my_statuses
+package com.saigopi.my_statuses
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

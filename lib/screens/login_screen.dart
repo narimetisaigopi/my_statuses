@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_statuses/screens/forgot_pasword.dart';
 import 'package:my_statuses/screens/home_screen.dart';
 import 'package:my_statuses/screens/registration_screen.dart';
 
@@ -88,13 +90,38 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
-                      Container(child: GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (_) =>  RegistrationScreen()));
+                      Container(
+                        width: double.infinity,
+                        child: RaisedButton(
+                          color: Colors.blue,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => RegistrationScreen()));
+                          },
+                          child: Text(
+                            "Register",
+                          ),
+                          textColor: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Text("Forgot Password?")),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ForgotPasswordScreen()));
                         },
-                        child: Text("Register here")),alignment: Alignment.centerRight,)
+                      )
                     ],
                   )),
             ),
