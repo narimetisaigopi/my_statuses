@@ -1,15 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_statuses/screens/auth/forgot_pasword.dart';
 import 'package:my_statuses/screens/home_screen.dart';
-import 'package:my_statuses/screens/login_screen.dart';
+import 'package:my_statuses/screens/auth/registration_screen.dart';
 
-class RegistrationScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   String _email, _password;
 
   var _formkey = GlobalKey<FormState>();
@@ -19,7 +21,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registratiom"),
+        title: Text("Login"),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -79,7 +81,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         child: RaisedButton(
                           color: Colors.blue,
                           onPressed: () {
-                            signup();
+                            login();
+                          },
+                          child: Text(
+                            "Login",
+                          ),
+                          textColor: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: RaisedButton(
+                          color: Colors.blue,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => RegistrationScreen()));
                           },
                           child: Text(
                             "Register",
@@ -88,33 +109,39 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
-                      Container(child: GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (_) =>  LoginScreen()));
+                      GestureDetector(
+                        child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Text("Forgot Password?")),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ForgotPasswordScreen()));
                         },
-                        child: Text("Login here")),alignment: Alignment.centerRight,)
+                      )
                     ],
                   )),
             ),
     );
   }
 
-  void signup() {
+  void login() {
     if (_formkey.currentState.validate()) {
       setState(() {
         isLoading = true;
       });
       FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _email, password: _password)
+          .signInWithEmailAndPassword(email: _email, password: _password)
           .then((user) {
         // sign up
         setState(() {
           isLoading = false;
         });
 
-        Fluttertoast.showToast(msg: "Register Success");
+        Fluttertoast.showToast(msg: "Login Success");
 
         Navigator.pushAndRemoveUntil(
             context,

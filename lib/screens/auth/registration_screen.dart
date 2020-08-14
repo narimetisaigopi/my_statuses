@@ -1,17 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:my_statuses/screens/forgot_pasword.dart';
 import 'package:my_statuses/screens/home_screen.dart';
-import 'package:my_statuses/screens/registration_screen.dart';
+import 'package:my_statuses/screens/auth/login_screen.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegistrationScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   String _email, _password;
 
   var _formkey = GlobalKey<FormState>();
@@ -21,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: Text("Registratiom"),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -81,26 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: RaisedButton(
                           color: Colors.blue,
                           onPressed: () {
-                            login();
-                          },
-                          child: Text(
-                            "Login",
-                          ),
-                          textColor: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => RegistrationScreen()));
+                            signup();
                           },
                           child: Text(
                             "Register",
@@ -109,18 +88,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
-                      GestureDetector(
-                        child: Container(
-                            alignment: Alignment.centerRight,
-                            child: Text("Forgot Password?")),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => ForgotPasswordScreen()));
-                        },
+                      Container(
+                        child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => LoginScreen()));
+                            },
+                            child: Text("Login here")),
+                        alignment: Alignment.centerRight,
                       )
                     ],
                   )),
@@ -128,20 +107,20 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void login() {
+  void signup() {
     if (_formkey.currentState.validate()) {
       setState(() {
         isLoading = true;
       });
       FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: _email, password: _password)
+          .createUserWithEmailAndPassword(email: _email, password: _password)
           .then((user) {
         // sign up
         setState(() {
           isLoading = false;
         });
 
-        Fluttertoast.showToast(msg: "Login Success");
+        Fluttertoast.showToast(msg: "Register Success");
 
         Navigator.pushAndRemoveUntil(
             context,
