@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'package:my_statuses/model/post_model.dart';
 import 'package:my_statuses/screens/auth/registration_screen.dart';
+
+import 'package:my_statuses/screens/post_status_screen.dart';
 import 'package:my_statuses/utilities/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -49,12 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (c) => PostStatusScreen()));
+          },
           child: Icon(Icons.publish),
         ),
         body: StreamBuilder(
-            stream:
-                Firestore.instance.collection(Constants.statues).snapshots(),
+            stream: Firestore.instance
+                .collection(Constants.statues)
+                .orderBy("likes")
+                .orderBy("timestamp", descending: true)
+                .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData)
                 return Center(child: CircularProgressIndicator());
@@ -74,24 +82,36 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+Query getQuery() {
+  Query query = Firestore.instance
+      .collection(Constants.statues)
+      .where("docid", isEqualTo: "MmuEd2wRd4V1Q6mu1Ryz");
+  return query;
+}
+
 class PostTile extends StatelessWidget {
   final PostModel postModel;
   PostTile({this.postModel});
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      trailing: Image.network(
-        postModel.imageURL,
-        height: 100,
-        width: 100,
-      ),
-      title: Text(
-        postModel.title,
-        style: Theme.of(context).textTheme.headline6,
-      ),
-      subtitle: Text(
-        postModel.message,
-        style: Theme.of(context).textTheme.bodyText1,
+    return Card(
+      child: ListTile(
+        leading: Image.network(
+          postModel.imageURL,
+          height: 100,
+          width: 100,
+        ),
+        title: Text(
+          postModel.title,
+          maxLines: 1,
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        subtitle: Text(
+          postModel.timestamp.toDate().toString().split(" ")[0],
+          maxLines: 2,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        trailing: Text("${postModel.likes} "),
       ),
     );
   }

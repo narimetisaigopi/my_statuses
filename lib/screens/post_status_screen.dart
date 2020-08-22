@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -32,6 +31,11 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
   @override
   void initState() {
     super.initState();
+
+    if (postModel != null) {
+    } else {
+      postModel = PostModel();
+    }
   }
 
   @override
@@ -167,8 +171,10 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
   pickImagesFromGallery(ImageSource source) {
     setState(() {
       ImagePicker.pickImage(source: source).then((onValue) {
-        _imagePath = onValue.path;
-        print("_imagePath : " + _imagePath);
+        setState(() {
+          _imagePath = onValue.path;
+          print("_imagePath : " + _imagePath);
+        });
       });
     });
   }
@@ -191,7 +197,7 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
             }
           });
     } else {
-      if (postModel.imageURL != null) {
+      if (postModel != null && postModel.imageURL != null) {
         return Image.network(postModel.imageURL, width: 250, height: 250);
       } else
         return Text("No Image Selected", textAlign: TextAlign.center);

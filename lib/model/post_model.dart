@@ -5,9 +5,16 @@ class PostModel {
   String imageURL;
   String message;
   String title;
-  Timestamp timeStamp;
+  Timestamp timestamp;
+  int likes;
+
   PostModel(
-      {this.docid, this.imageURL, this.message, this.title, this.timeStamp});
+      {this.docid,
+      this.imageURL,
+      this.message,
+      this.title,
+      this.timestamp,
+      this.likes});
 
   factory PostModel.fromJSON(Map<String, dynamic> map) {
     return PostModel(
@@ -15,7 +22,8 @@ class PostModel {
         imageURL: map["imageURL"],
         message: map["message"],
         title: map["title"],
-        timeStamp: map["timeStamp"]);
+        likes: map["likes"],
+        timestamp: map["timestamp"]);
   }
 
   toMap() {
@@ -24,6 +32,7 @@ class PostModel {
     map['imageURL'] = imageURL;
     map['message'] = message;
     map['title'] = title;
-    map["timeStamp"] = FieldValue.serverTimestamp();
+    map['likes'] = likes;
+    map["timestamp"] = FieldValue.serverTimestamp();
   }
 }
