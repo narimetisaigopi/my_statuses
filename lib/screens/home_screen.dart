@@ -3,9 +3,10 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_statuses/constants.dart';
+
 import 'package:my_statuses/model/post_model.dart';
 import 'package:my_statuses/screens/auth/registration_screen.dart';
+import 'package:my_statuses/utilities/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
