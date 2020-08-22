@@ -25,105 +25,107 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
-          : Container(
-              margin: EdgeInsets.all(16),
-              alignment: Alignment.center,
-              child: Form(
-                  key: _formkey,
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (item) {
-                          return item.contains("@")
-                              ? null
-                              : "Enter valid Email";
-                        },
-                        onChanged: (item) {
-                          setState(() {
-                            _email = item;
-                          });
-                        },
-                        decoration: InputDecoration(
-                            hintText: "Enter Email",
-                            labelText: "Email",
-                            border: OutlineInputBorder()),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        obscureText: true,
-                        keyboardType: TextInputType.text,
-                        validator: (item) {
-                          return item.length > 6
-                              ? null
-                              : "Password must be 6 characters";
-                        },
-                        onChanged: (item) {
-                          setState(() {
-                            _password = item;
-                          });
-                        },
-                        decoration: InputDecoration(
-                            hintText: "Enter Password",
-                            labelText: "Password",
-                            border: OutlineInputBorder()),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          onPressed: () {
-                            login();
-                          },
-                          child: Text(
-                            "Login",
-                          ),
-                          textColor: Colors.white,
+          : SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.all(16),
+                alignment: Alignment.center,
+                child: Form(
+                    key: _formkey,
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          onPressed: () {
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (item) {
+                            return item.contains("@")
+                                ? null
+                                : "Enter valid Email";
+                          },
+                          onChanged: (item) {
+                            setState(() {
+                              _email = item;
+                            });
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Enter Email",
+                              labelText: "Email",
+                              border: OutlineInputBorder()),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          obscureText: true,
+                          keyboardType: TextInputType.text,
+                          validator: (item) {
+                            return item.length > 6
+                                ? null
+                                : "Password must be 6 characters";
+                          },
+                          onChanged: (item) {
+                            setState(() {
+                              _password = item;
+                            });
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Enter Password",
+                              labelText: "Password",
+                              border: OutlineInputBorder()),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            onPressed: () {
+                              login();
+                            },
+                            child: Text(
+                              "Login",
+                            ),
+                            textColor: Colors.white,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => RegistrationScreen()));
+                            },
+                            child: Text(
+                              "Register",
+                            ),
+                            textColor: Colors.white,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          child: Container(
+                              alignment: Alignment.centerRight,
+                              child: Text("Forgot Password?")),
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => RegistrationScreen()));
+                                    builder: (_) => ForgotPasswordScreen()));
                           },
-                          child: Text(
-                            "Register",
-                          ),
-                          textColor: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        child: Container(
-                            alignment: Alignment.centerRight,
-                            child: Text("Forgot Password?")),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => ForgotPasswordScreen()));
-                        },
-                      )
-                    ],
-                  )),
+                        )
+                      ],
+                    )),
+              ),
             ),
     );
   }
