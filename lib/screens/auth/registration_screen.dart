@@ -190,7 +190,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       isLoading = true;
     });
 
-    FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+    //FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+    User firebaseUser = FirebaseAuth.instance.currentUser;
 
     UserModel userModel = new UserModel();
     userModel.email = _email;
@@ -198,10 +199,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     userModel.mobileNumber = _mobile;
     userModel.uid = firebaseUser.uid;
 
-    await Firestore.instance
+    // await FireStore.instance
+    //     .collection("user")
+    //     .document(firebaseUser.uid)
+    //     .setData(userModel.toMap());
+
+    await FirebaseFirestore.instance
         .collection("user")
-        .document(firebaseUser.uid)
-        .setData(userModel.toMap());
+        .doc(firebaseUser.uid)
+        .set(userModel.toMap());
 
     Fluttertoast.showToast(msg: "Register Success");
 
@@ -213,7 +219,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void sendVerificationEmail() async {
-    FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+    //FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+    User firebaseUser = FirebaseAuth.instance.currentUser;
     await firebaseUser.sendEmailVerification();
 
     Fluttertoast.showToast(

@@ -143,9 +143,9 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
 
       int id = 0;
 
-      DocumentReference countDocumentReference = Firestore.instance
+      DocumentReference countDocumentReference = FirebaseFirestore.instance
           .collection(Constants.statues)
-          .document(Constants.count);
+          .doc(Constants.count);
 
       FirebaseUtils.postNotification(postModel, _imagePath);
 
@@ -153,9 +153,9 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
       // await postDocumentReference.setData(notificationModel.toMap());
 
       if (id == 0) {
-        await countDocumentReference.setData({"id": id});
+        await countDocumentReference.set({"id": id});
       } else {
-        await countDocumentReference.updateData({"id": id});
+        await countDocumentReference.update({"id": id});
       }
 
       Fluttertoast.showToast(msg: "Posted successfully.");

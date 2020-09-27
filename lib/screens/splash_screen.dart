@@ -14,21 +14,15 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 5), () {
-      FirebaseAuth.instance.currentUser().then((value) {
-        if (value == null) {
-          // user not logged ==> Login Screen
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => LoginScreen()),
-              (route) => false);
-        } else {
-          // user already logged in ==> Home Screen
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => HomeScreen()),
-              (route) => false);
-        }
-      });
+      if (FirebaseAuth.instance.currentUser == null) {
+        // user not logged ==> Login Screen
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => LoginScreen()), (route) => false);
+      } else {
+        // user already logged in ==> Home Screen
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
+      }
     });
   }
 

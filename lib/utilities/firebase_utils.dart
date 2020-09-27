@@ -11,7 +11,7 @@ class FirebaseUtils {
       FirebaseStorage.instance.ref().child(Constants.statues);
 
   static CollectionReference statuesCollectionsReference =
-      Firestore.instance.collection(Constants.statues);
+      FirebaseFirestore.instance.collection(Constants.statues);
 
   static Future<String> uploadImageToStorage(File file) async {
     print("uploadImageToStorage");
@@ -40,14 +40,14 @@ class FirebaseUtils {
       print("addProdcut url ${model.imageURL}");
     }
 
-    DocumentReference ref = statuesCollectionsReference.document();
+    DocumentReference ref = statuesCollectionsReference.doc();
 
     if (model.docid != null) {
-      ref = statuesCollectionsReference.document(model.docid);
+      ref = statuesCollectionsReference.doc(model.docid);
     }
-    model.docid = ref.documentID;
+    model.docid = ref.id;
     model.imageURL = model.imageURL;
     print(model.toMap().toString());
-    return await ref.setData(model.toMap());
+    return await ref.set(model.toMap());
   }
 }

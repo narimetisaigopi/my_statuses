@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_statuses/screens/auth/forgot_pasword.dart';
 import 'package:my_statuses/screens/home_screen.dart';
 import 'package:my_statuses/screens/auth/registration_screen.dart';

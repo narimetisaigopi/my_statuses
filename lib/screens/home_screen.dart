@@ -16,14 +16,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  FirebaseUser firebaseUser;
+  User firebaseUser;
 
   getData() {
-    FirebaseAuth.instance.currentUser().then((value) {
-      setState(() {
-        firebaseUser = value;
-      });
-    });
+    firebaseUser = FirebaseAuth.instance.currentUser;
   }
 
   @override
@@ -58,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Icon(Icons.publish),
         ),
         body: StreamBuilder(
-            stream: Firestore.instance
+            stream: FirebaseFirestore.instance
                 .collection(Constants.statues)
                 .orderBy("likes")
                 .orderBy("timestamp", descending: true)
@@ -83,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 Query getQuery() {
-  Query query = Firestore.instance
+  Query query = FirebaseFirestore.instance
       .collection(Constants.statues)
       .where("docid", isEqualTo: "MmuEd2wRd4V1Q6mu1Ryz");
   return query;
