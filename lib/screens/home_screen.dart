@@ -9,6 +9,7 @@ import 'package:my_statuses/screens/auth/registration_screen.dart';
 
 import 'package:my_statuses/screens/post_status_screen.dart';
 import 'package:my_statuses/utilities/constants.dart';
+import 'package:my_statuses/utilities/firebase_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -36,7 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.exit_to_app),
-                onPressed: () {
+                onPressed: () async {
+                  await FirebaseUtils.removeFirebaseToken();
                   FirebaseAuth.instance.signOut().then((onValue) {
                     Navigator.push(
                         context,

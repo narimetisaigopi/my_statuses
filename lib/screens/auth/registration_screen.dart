@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_statuses/model/user_model.dart';
 import 'package:my_statuses/screens/home_screen.dart';
 import 'package:my_statuses/screens/auth/login_screen.dart';
+import 'package:my_statuses/utilities/firebase_utils.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -210,6 +211,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         .set(userModel.toMap());
 
     Fluttertoast.showToast(msg: "Register Success");
+
+    await FirebaseUtils.updateFirebaseToken();
 
     sendVerificationEmail();
 

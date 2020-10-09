@@ -32,6 +32,9 @@ dependencies:
   firebase_storage: 
   flutter_svg: 
   image_picker: 
+  firebase_messaging: 7.0.3
+  firebase_core:
+
 
 
 

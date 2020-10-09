@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_statuses/screens/auth/forgot_pasword.dart';
 import 'package:my_statuses/screens/home_screen.dart';
 import 'package:my_statuses/screens/auth/registration_screen.dart';
+import 'package:my_statuses/utilities/firebase_utils.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -136,13 +137,15 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password)
-          .then((user) {
+          .then((user) async {
         // sign up
         setState(() {
           isLoading = false;
         });
 
         Fluttertoast.showToast(msg: "Login Success");
+
+        await FirebaseUtils.updateFirebaseToken();
 
         Navigator.pushAndRemoveUntil(
             context,
