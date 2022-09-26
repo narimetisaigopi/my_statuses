@@ -5,6 +5,7 @@ import 'package:my_statuses/screens/splash_screen.dart';
 
 void main() async {
   // ravi modifed the data in 10th line
+  // swhizztest
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
