@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_statuses/screens/splash_screen.dart';
 
 void main() async {
-  // ravi modifed
+  // iam asking changes
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
