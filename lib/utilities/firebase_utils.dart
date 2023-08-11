@@ -15,6 +15,8 @@ class FirebaseUtils {
 
   static CollectionReference statuesCollectionsReference =
       FirebaseFirestore.instance.collection(Constants.statues);
+  static CollectionReference usersCollectionsReference =
+      FirebaseFirestore.instance.collection(Constants.user);
 
   static Future<String> uploadImageToStorage(File file) async {
     print("uploadImageToStorage");

@@ -5,28 +5,49 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_statuses/model/user_model.dart';
 import 'package:my_statuses/screens/home_screen.dart';
-import 'package:my_statuses/screens/auth/login_screen.dart';
 import 'package:my_statuses/utilities/firebase_utils.dart';
 
-class RegistrationScreen extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   String _email = "", _password = "", _name = "", _mobile = "";
 
   var _formkey = GlobalKey<FormState>();
-
   bool autoValidate = false;
-
   bool isLoading = false;
+  UserModel userModel = UserModel();
+
+  TextEditingController nameTextEditingController = TextEditingController();
+  TextEditingController mobileNumberTextEditingController =
+      TextEditingController();
+  TextEditingController emailTextEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    FirebaseUtils.usersCollectionsReference
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      if (value.data() != null) {
+        userModel = UserModel.fromMap(value.data() as Map<String, dynamic>);
+        nameTextEditingController.text = userModel.name;
+        emailTextEditingController.text = userModel.email;
+        mobileNumberTextEditingController.text = userModel.mobileNumber;
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Registratiom"),
+        title: Text("Profile"),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -39,10 +60,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: <Widget>[
+                        CircleAvatar(
+                          radius: 50,
+                          child: userModel.profilePic.isNotEmpty
+                              ? Image.network(userModel.profilePic)
+                              : null,
+                        ),
                         SizedBox(
                           height: 20,
                         ),
                         TextFormField(
+                          controller: nameTextEditingController,
                           keyboardType: TextInputType.text,
                           validator: (item) {
                             return item!.length > 0 ? null : "Enter valid Name";
@@ -61,6 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: 20,
                         ),
                         TextFormField(
+                          controller: mobileNumberTextEditingController,
                           keyboardType: TextInputType.phone,
                           maxLength: 10,
                           validator: (item) {
@@ -79,12 +108,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           decoration: InputDecoration(
                               hintText: "Enter Mobile Number",
                               labelText: "Mobile Number",
+                              counterText: "",
                               border: OutlineInputBorder()),
                         ),
                         SizedBox(
                           height: 20,
                         ),
                         TextFormField(
+                          readOnly: true,
+                          enabled: false,
+                          controller: emailTextEditingController,
                           keyboardType: TextInputType.emailAddress,
                           validator: (item) {
                             return item!.contains("@")
@@ -104,27 +137,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         SizedBox(
                           height: 20,
                         ),
-                        TextFormField(
-                          obscureText: true,
-                          keyboardType: TextInputType.text,
-                          validator: (item) {
-                            return item!.length > 6
-                                ? null
-                                : "Password must be 6 characters";
-                          },
-                          onChanged: (item) {
-                            setState(() {
-                              _password = item;
-                            });
-                          },
-                          decoration: InputDecoration(
-                              hintText: "Enter Password",
-                              labelText: "Password",
-                              border: OutlineInputBorder()),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
                         Container(
                           width: double.infinity,
                           child: ElevatedButton(
@@ -132,24 +144,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               signup();
                             },
                             child: Text(
-                              "Register",
+                              "Update Profile",
                             ),
                           ),
                         ),
                         SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => LoginScreen()));
-                              },
-                              child: Text("Login here")),
-                          alignment: Alignment.centerRight,
-                        )
                       ],
                     )),
               ),

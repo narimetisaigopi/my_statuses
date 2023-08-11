@@ -9,6 +9,8 @@ import 'package:my_statuses/screens/post_status_screen.dart';
 import 'package:my_statuses/utilities/constants.dart';
 import 'package:my_statuses/utilities/firebase_utils.dart';
 
+import 'profile_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -34,6 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text("Home"),
           actions: <Widget>[
             IconButton(
+                icon: Icon(Icons.account_circle),
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ProfileScreen()),
+                  );
+                }),
+            IconButton(
                 icon: Icon(Icons.exit_to_app),
                 onPressed: () async {
                   await FirebaseUtils.removeFirebaseToken();
@@ -51,12 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.push(
                 context, MaterialPageRoute(builder: (c) => PostStatusScreen()));
           },
-          child: Icon(Icons.publish),
+          child: Icon(Icons.post_add),
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection(Constants.statues)
-                .orderBy("likes")
+                // .orderBy("likes")
                 .orderBy("timestamp", descending: true)
                 .snapshots(),
             builder: (context, snapshot) {

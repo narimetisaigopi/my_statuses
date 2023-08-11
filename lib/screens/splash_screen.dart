@@ -33,7 +33,11 @@ class _SplashScreenState extends State<SplashScreen> {
         height: double.infinity,
         width: double.infinity,
         child: Center(
-          child: Text("Hi welcome to the team"),
+          child: Text(
+            "Hello\nwelcome to,\nmy statues app",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.displayLarge,
+          ),
         ),
       ),
     );

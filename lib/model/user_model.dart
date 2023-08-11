@@ -6,6 +6,7 @@ class UserModel {
   String email;
   var timestamp;
   String uid;
+  String profilePic;
   // bool isMale;
   // int age;
 
@@ -15,6 +16,7 @@ class UserModel {
       this.mobileNumber = "",
       this.email = "",
       this.timestamp = "",
+      this.profilePic = "",
       this.uid = ""});
 
   //3rd creating map -- insert
@@ -28,6 +30,7 @@ class UserModel {
       'mobileNumber': mobileNumber,
       'email': email,
       'uid': uid,
+      'profilePic': profilePic,
       'timestamp': FieldValue.serverTimestamp()
     };
   }
@@ -36,11 +39,11 @@ class UserModel {
 
   factory UserModel.fromMap(Map map) {
     return UserModel(
-      name: map["name"],
-      mobileNumber: map["mobileNumber"],
-      email: map["email"],
-      timestamp: map["timestamp"],
-      uid: map["uid"],
-    );
+        name: map["name"] ?? "",
+        mobileNumber: map["mobileNumber"] ?? "",
+        email: map["email"] ?? "",
+        timestamp: map["timestamp"] ?? "",
+        uid: map["uid"] ?? "",
+        profilePic: map['profilePic'] ?? "");
   }
 }
