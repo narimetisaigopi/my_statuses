@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_social_button/flutter_social_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_statuses/screens/auth/forgot_pasword.dart';
 import 'package:my_statuses/screens/home_screen.dart';
 import 'package:my_statuses/screens/auth/registration_screen.dart';
 import 'package:my_statuses/utilities/firebase_utils.dart';
+
+import '../../model/user_model.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -118,12 +123,63 @@ class _LoginScreenState extends State<LoginScreen> {
                                 MaterialPageRoute(
                                     builder: (_) => ForgotPasswordScreen()));
                           },
-                        )
+                        ),
+                        FlutterSocialButton(
+                          onTap: () {
+                            googleSignIn();
+                          },
+                          buttonType: ButtonType
+                              .google, // Button type for different type buttons
+                        ),
                       ],
                     )),
               ),
             ),
     );
+  }
+
+  void googleSignIn() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      GoogleSignIn googleSignIn = GoogleSignIn();
+      GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        AuthCredential authCredential = GoogleAuthProvider.credential(
+            accessToken: googleSignInAuthentication.accessToken,
+            idToken: googleSignInAuthentication.idToken);
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithCredential(authCredential);
+
+        User firebaseUser = FirebaseAuth.instance.currentUser!;
+
+        UserModel userModel = new UserModel();
+        userModel.email = firebaseUser.email ?? "";
+        userModel.name = firebaseUser.displayName ?? "";
+        userModel.profilePic = firebaseUser.photoURL ?? "";
+        userModel.uid = firebaseUser.uid;
+
+        await FirebaseFirestore.instance
+            .collection("user")
+            .doc(firebaseUser.uid)
+            .set(userModel.toMap());
+
+        // update user data to fire
+
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
+      }
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void login() {
