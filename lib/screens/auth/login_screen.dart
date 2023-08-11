@@ -12,7 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String _email, _password;
+  String _email = "", _password = "";
 
   var _formkey = GlobalKey<FormState>();
 
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           keyboardType: TextInputType.emailAddress,
                           validator: (item) {
-                            return item.contains("@")
+                            return item!.contains("@")
                                 ? null
                                 : "Enter valid Email";
                           },
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: true,
                           keyboardType: TextInputType.text,
                           validator: (item) {
-                            return item.length > 6
+                            return item!.length > 6
                                 ? null
                                 : "Password must be 6 characters";
                           },
@@ -79,15 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Container(
                           width: double.infinity,
-                          child: RaisedButton(
-                            color: Colors.blue,
+                          child: ElevatedButton(
                             onPressed: () {
                               login();
                             },
                             child: Text(
                               "Login",
                             ),
-                            textColor: Colors.white,
                           ),
                         ),
                         SizedBox(
@@ -95,8 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Container(
                           width: double.infinity,
-                          child: RaisedButton(
-                            color: Colors.blue,
+                          child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -106,7 +103,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               "Register",
                             ),
-                            textColor: Colors.white,
                           ),
                         ),
                         SizedBox(
@@ -131,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void login() {
-    if (_formkey.currentState.validate()) {
+    if (_formkey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });

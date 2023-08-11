@@ -20,22 +20,19 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
 
   bool isLoading = false;
 
-  PostModel postModel;
+  late PostModel postModel;
 
-  BuildContext context;
+  late BuildContext context;
   var globalKey = GlobalKey<ScaffoldState>();
 
-  String _imagePath;
-  Future<File> imageFile;
+  String _imagePath = "";
+  Future<File>? imageFile;
 
   @override
   void initState() {
     super.initState();
 
-    if (postModel != null) {
-    } else {
-      postModel = PostModel();
-    }
+    postModel = PostModel();
   }
 
   @override
@@ -52,8 +49,7 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
           child: Column(
             children: [
               showImage(),
-              RaisedButton(
-                textColor: Colors.white,
+              ElevatedButton(
                 onPressed: () {
                   pickImagesFromGallery(ImageSource.gallery);
                 },
@@ -91,9 +87,7 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
                   ? MyCircleLoading()
                   : Container(
                       width: double.infinity,
-                      child: RaisedButton(
-                        color: Colors.lightBlue,
-                        shape: StadiumBorder(),
+                      child: ElevatedButton(
                         onPressed: () {
                           var timeStamp =
                               FieldValue.serverTimestamp().toString();
@@ -116,13 +110,13 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
   void validateMobileNumber() async {
     FocusScope.of(context).unfocus();
 
-    if (titleEditingController.text == null ||
+    if (titleEditingController.text.isEmpty ||
         titleEditingController.text.length == 0) {
       Fluttertoast.showToast(msg: "Enter title");
       return;
     }
 
-    if (messageEditingController.text == null ||
+    if (messageEditingController.text.isEmpty ||
         messageEditingController.text.length == 0) {
       Fluttertoast.showToast(msg: "Enter description");
 
@@ -144,7 +138,7 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
       int id = 0;
 
       DocumentReference countDocumentReference = FirebaseFirestore.instance
-          .collection(Constants.statues)
+          .collection(Constants.count)
           .doc(Constants.count);
 
       FirebaseUtils.postNotification(postModel, _imagePath);
@@ -159,6 +153,7 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
       }
 
       Fluttertoast.showToast(msg: "Posted successfully.");
+      Navigator.pop(context);
     } catch (e) {
       Fluttertoast.showToast(msg: "Post failed due to : $e.");
     }
@@ -170,9 +165,9 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
 
   pickImagesFromGallery(ImageSource source) {
     setState(() {
-      ImagePicker.pickImage(source: source).then((onValue) {
+      ImagePicker().pickImage(source: source).then((onValue) {
         setState(() {
-          _imagePath = onValue.path;
+          _imagePath = onValue!.path;
           print("_imagePath : " + _imagePath);
         });
       });
@@ -188,7 +183,7 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
           builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
             if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.data != null) {
-              return Image.file(snapshot.data, width: 250, height: 250);
+              return Image.file(snapshot.data!, width: 250, height: 250);
             } else if (snapshot.error != null) {
               print("snapshot.error : ${snapshot.error} ");
               return Text("Error Picking Image", textAlign: TextAlign.center);
@@ -197,7 +192,7 @@ class _PostStatusScreenState extends State<PostStatusScreen> {
             }
           });
     } else {
-      if (postModel != null && postModel.imageURL != null) {
+      if (postModel.docid.isNotEmpty && postModel.imageURL.isNotEmpty) {
         return Image.network(postModel.imageURL, width: 250, height: 250);
       } else
         return Text("No Image Selected", textAlign: TextAlign.center);

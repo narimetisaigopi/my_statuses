@@ -7,35 +7,33 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:my_statuses/model/post_model.dart';
 import 'package:my_statuses/utilities/constants.dart';
 import 'package:my_statuses/utilities/utilities.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class FirebaseUtils {
-  static final StorageReference notificationsStorageReference =
-      FirebaseStorage.instance.ref().child(Constants.statues);
+  static final Reference notificationsStorageReference =
+      firebase_storage.FirebaseStorage.instance.ref().child(Constants.statues);
 
   static CollectionReference statuesCollectionsReference =
       FirebaseFirestore.instance.collection(Constants.statues);
 
   static Future<String> uploadImageToStorage(File file) async {
     print("uploadImageToStorage");
-    final StorageUploadTask storageUploadTask = notificationsStorageReference
+    final UploadTask storageUploadTask = notificationsStorageReference
         .child(Utilities.getFileName(file))
         .putFile(file);
-    final StorageTaskSnapshot storageTaskSnapshot =
-        (await storageUploadTask.onComplete);
+    final TaskSnapshot storageTaskSnapshot = (await storageUploadTask);
     final url = (await storageTaskSnapshot.ref.getDownloadURL());
     print("url : $url");
     return url;
   }
 
   static Future postNotification(PostModel model, String filePath) async {
-    if (filePath != null) {
+    if (filePath.isNotEmpty) {
       // here deleteing old image from storage
-      if (model.imageURL != null && model.imageURL.contains("https://")) {
-        await FirebaseStorage.instance
-            .getReferenceFromUrl(model.imageURL)
-            .then((onValue) {
-          onValue.delete();
-        });
+      if (model.imageURL.isNotEmpty && model.imageURL.contains("https://")) {
+        Reference reference =
+            FirebaseStorage.instance.refFromURL(model.imageURL);
+        await reference.delete();
       }
 
       model.imageURL = await uploadImageToStorage(File(filePath));
@@ -44,20 +42,19 @@ class FirebaseUtils {
 
     DocumentReference ref = statuesCollectionsReference.doc();
 
-    if (model.docid != null) {
+    if (model.docid.isNotEmpty) {
       ref = statuesCollectionsReference.doc(model.docid);
     }
     model.docid = ref.id;
     model.imageURL = model.imageURL;
-    print(model.toMap().toString());
     return await ref.set(model.toMap());
   }
 
   static updateFirebaseToken() async {
-    FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-    String token = await firebaseMessaging.getToken();
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    String? token = await firebaseMessaging.getToken();
     print("updateFirebaseToken $token");
-    User user = FirebaseAuth.instance.currentUser;
+    User user = FirebaseAuth.instance.currentUser!;
 
     await FirebaseFirestore.instance
         .collection("user")
@@ -66,7 +63,7 @@ class FirebaseUtils {
   }
 
   static removeFirebaseToken() async {
-    User user = FirebaseAuth.instance.currentUser;
+    User user = FirebaseAuth.instance.currentUser!;
 
     await FirebaseFirestore.instance
         .collection("user")

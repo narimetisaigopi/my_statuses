@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +15,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  User firebaseUser;
+  late User firebaseUser;
 
   getData() {
-    firebaseUser = FirebaseAuth.instance.currentUser;
+    firebaseUser = FirebaseAuth.instance.currentUser!;
   }
 
   @override
@@ -40,10 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () async {
                   await FirebaseUtils.removeFirebaseToken();
                   FirebaseAuth.instance.signOut().then((onValue) {
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (_) => RegistrationScreen()));
+                        MaterialPageRoute(builder: (_) => RegistrationScreen()),
+                        (route) => false);
                   });
                 })
           ],
@@ -55,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Icon(Icons.publish),
         ),
-        body: StreamBuilder(
+        body: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection(Constants.statues)
                 .orderBy("likes")
@@ -64,17 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context, snapshot) {
               if (!snapshot.hasData)
                 return Center(child: CircularProgressIndicator());
-              if (snapshot == null || snapshot.data.documents.length == 0) {
+              if (snapshot.data == null || snapshot.data!.docs.length == 0) {
                 return Center(child: Text("No Data Found"));
               }
               return ListView.builder(
-                  itemCount: snapshot.data.documents.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    PostModel postModel =
-                        PostModel.fromJSON(snapshot.data.documents[index].data);
-                    return PostTile(
-                      postModel: postModel,
-                    );
+                    if (snapshot.data!.docs[index].data() != null) {
+                      PostModel postModel = PostModel.fromJSON(
+                          snapshot.data!.docs[index].data()
+                              as Map<String, dynamic>);
+                      return PostTile(
+                        postModel: postModel,
+                      );
+                    }
+                    return Container();
                   });
             }));
   }
@@ -89,26 +91,35 @@ Query getQuery() {
 
 class PostTile extends StatelessWidget {
   final PostModel postModel;
-  PostTile({this.postModel});
+  PostTile({required this.postModel});
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Image.network(
-          postModel.imageURL,
-          height: 100,
-          width: 100,
-        ),
+        leading: postModel.imageURL.isNotEmpty
+            ? Image.network(
+                postModel.imageURL,
+                height: 100,
+                width: 100,
+              )
+            : Container(
+                height: 100,
+                width: 100,
+                alignment: Alignment.center,
+                child: Text("No Pic"),
+              ),
         title: Text(
           postModel.title,
           maxLines: 1,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
-        subtitle: Text(
-          postModel.timestamp.toDate().toString().split(" ")[0],
-          maxLines: 2,
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
+        subtitle: postModel.timestamp != null
+            ? Text(
+                postModel.timestamp!.toDate().toString().split(" ")[0],
+                maxLines: 2,
+                style: Theme.of(context).textTheme.bodyLarge,
+              )
+            : Container(),
         trailing: Text("${postModel.likes} "),
       ),
     );

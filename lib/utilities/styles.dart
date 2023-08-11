@@ -28,12 +28,8 @@ const textInputDecoration = InputDecoration(
       OutlineInputBorder(borderSide: BorderSide(color: appColor, width: 2.0)),
 );
 
-var button = RaisedButton(
+var button = ElevatedButton(
   child: Text("Rock & Roll"),
-  color: Colors.red,
-  textColor: Colors.yellow,
-  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-  splashColor: Colors.grey,
   onPressed: () {},
 );
 

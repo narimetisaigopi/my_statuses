@@ -14,7 +14,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String _email, _password, _name, _mobile;
+  String _email = "", _password = "", _name = "", _mobile = "";
 
   var _formkey = GlobalKey<FormState>();
 
@@ -24,7 +24,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Registratiom"),
@@ -37,7 +36,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 alignment: Alignment.center,
                 child: Form(
                     key: _formkey,
-                    autovalidate: autoValidate,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       children: <Widget>[
                         SizedBox(
@@ -46,7 +45,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         TextFormField(
                           keyboardType: TextInputType.text,
                           validator: (item) {
-                            return item.length > 0 ? null : "Enter valid Name";
+                            return item!.length > 0 ? null : "Enter valid Name";
                           },
                           onChanged: (item) {
                             setState(() {
@@ -65,7 +64,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           keyboardType: TextInputType.phone,
                           maxLength: 10,
                           validator: (item) {
-                            return item.length < 10
+                            return item!.length < 10
                                 ? "Enter valid Mobile"
                                 : null;
                           },
@@ -75,7 +74,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             });
                           },
                           inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ],
                           decoration: InputDecoration(
                               hintText: "Enter Mobile Number",
@@ -88,7 +87,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         TextFormField(
                           keyboardType: TextInputType.emailAddress,
                           validator: (item) {
-                            return item.contains("@")
+                            return item!.contains("@")
                                 ? null
                                 : "Enter valid Email";
                           },
@@ -109,7 +108,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           obscureText: true,
                           keyboardType: TextInputType.text,
                           validator: (item) {
-                            return item.length > 6
+                            return item!.length > 6
                                 ? null
                                 : "Password must be 6 characters";
                           },
@@ -128,15 +127,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         Container(
                           width: double.infinity,
-                          child: RaisedButton(
-                            color: Colors.blue,
+                          child: ElevatedButton(
                             onPressed: () {
                               signup();
                             },
                             child: Text(
                               "Register",
                             ),
-                            textColor: Colors.white,
                           ),
                         ),
                         SizedBox(
@@ -161,7 +158,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void signup() {
-    if (_formkey.currentState.validate()) {
+    if (_formkey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
@@ -192,7 +189,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     });
 
     //FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
-    User firebaseUser = FirebaseAuth.instance.currentUser;
+    User firebaseUser = FirebaseAuth.instance.currentUser!;
 
     UserModel userModel = new UserModel();
     userModel.email = _email;
@@ -223,7 +220,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void sendVerificationEmail() async {
     //FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
-    User firebaseUser = FirebaseAuth.instance.currentUser;
+    User firebaseUser = FirebaseAuth.instance.currentUser!;
     await firebaseUser.sendEmailVerification();
 
     Fluttertoast.showToast(

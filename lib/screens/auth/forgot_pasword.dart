@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+// ignore: must_be_immutable
 class ForgotPasswordScreen extends StatelessWidget {
   TextEditingController editController = TextEditingController();
   @override
@@ -27,8 +28,7 @@ class ForgotPasswordScreen extends StatelessWidget {
             ),
             Container(
               width: double.infinity,
-              child: RaisedButton(
-                color: Colors.blue,
+              child: ElevatedButton(
                 onPressed: () {
                   resetPassword(context);
                 },

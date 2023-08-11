@@ -4,14 +4,18 @@ class UserModel {
   String name;
   String mobileNumber;
   String email;
-  Timestamp timestamp;
+  var timestamp;
   String uid;
   // bool isMale;
   // int age;
 
   // 2nd part
   UserModel(
-      {this.name, this.mobileNumber, this.email, this.timestamp, this.uid});
+      {this.name = "",
+      this.mobileNumber = "",
+      this.email = "",
+      this.timestamp = "",
+      this.uid = ""});
 
   //3rd creating map -- insert
   toMap() {
