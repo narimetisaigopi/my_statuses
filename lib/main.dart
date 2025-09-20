@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:my_statuses/screens/splash_screen.dart';
 
 void main() async {
-  // here i am making changes
+  // This is nikitha code
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  //This is my sister's code alsso
   // stock uppdates, bank , job ,
   // firebase token
   // firebaseMessaging.configure(
