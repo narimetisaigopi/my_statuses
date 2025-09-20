@@ -6,7 +6,7 @@ void main() async {
   // This is nikitha code
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  //This is my sister's code alsso
   // stock uppdates, bank , job ,
   // firebase token
   // firebaseMessaging.configure(
